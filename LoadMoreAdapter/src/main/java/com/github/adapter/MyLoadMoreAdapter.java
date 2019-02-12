@@ -202,7 +202,7 @@ public abstract class MyLoadMoreAdapter<T> extends MyBaseRecyclerAdapter<T> {
             return headerViewList.keyAt(position);
         } else if (isFooterViewPos(position)) {
             return footerViewList.keyAt(position - getHeaderCount() - getDataCount());
-        } else if (mList != null && onLoadMoreListener != null && position == getItemCount() - 1) {
+        } else if (/*mList != null &&*/ onLoadMoreListener != null && position == getItemCount() - 1) {
             if (isLoadError) {
                 return load_error_view_type;
             } else if (hasMoreData) {
@@ -284,7 +284,9 @@ public abstract class MyLoadMoreAdapter<T> extends MyBaseRecyclerAdapter<T> {
                     });
                 }
             } else {
-                holder.bottomView.setOnClickListener(null);
+                if(holder.bottomView!=null){
+                    holder.bottomView.setOnClickListener(null);
+                }
                 switch (holder.getItemViewType()) {
                     case load_error_view_type:
                         holder.bottomView.setOnClickListener(new View.OnClickListener() {
