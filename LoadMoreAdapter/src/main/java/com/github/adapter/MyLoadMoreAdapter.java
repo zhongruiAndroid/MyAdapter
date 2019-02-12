@@ -375,10 +375,11 @@ public abstract class MyLoadMoreAdapter<T> extends MyBaseRecyclerAdapter<T> {
 
     @Override
     public int getItemCount() {
+        int otherSize=getLoadMoreViewCount() + getHeaderCount() + getFooterCount();
         if (testListSize > 0) {
-            return testListSize + getLoadMoreViewCount() + getHeaderCount() + getFooterCount();
+            return testListSize + otherSize;
         }
-        return mList == null ? getLoadMoreViewCount() + getHeaderCount() + getFooterCount() : mList.size() + getLoadMoreViewCount() + getHeaderCount() + getFooterCount();
+        return mList == null ? otherSize: mList.size() + otherSize;
     }
 
     public void addHeaderView(View view) {
