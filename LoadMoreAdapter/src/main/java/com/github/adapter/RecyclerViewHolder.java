@@ -35,7 +35,7 @@ public class RecyclerViewHolder extends RecyclerView.ViewHolder{
         return (V) getView(viewId);
     }
 
-    public View getView(int viewId) {
+    public  <T extends View> T getView(int viewId) {
         return findViewById(viewId);
     }
 
