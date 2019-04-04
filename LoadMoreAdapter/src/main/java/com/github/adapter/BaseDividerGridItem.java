@@ -79,7 +79,7 @@ public class BaseDividerGridItem extends RecyclerView.ItemDecoration {
         return mDividerWidth;
     }
 
-    public int getmDividerWidthHalf() {
+    public int getDividerWidthHalf() {
         return mDividerWidthHalf;
     }
 

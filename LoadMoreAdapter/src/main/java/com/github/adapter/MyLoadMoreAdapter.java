@@ -607,7 +607,7 @@ public abstract class MyLoadMoreAdapter<T> extends MyBaseRecyclerAdapter<T> {
                     return 1;
                 }
             });
-            gridLayoutManager.setSpanCount(gridLayoutManager.getSpanCount());
+//            gridLayoutManager.setSpanCount(gridLayoutManager.getSpanCount());
         }
     }
 }

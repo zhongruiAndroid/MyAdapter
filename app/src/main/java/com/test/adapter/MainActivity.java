@@ -1,19 +1,25 @@
 package com.test.adapter;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.github.adapter.BaseDividerGridItem;
 import com.github.adapter.MyLoadMoreAdapter;
 import com.github.adapter.MyRecyclerViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,8 +33,25 @@ public class MainActivity extends AppCompatActivity {
             public void bindData(MyRecyclerViewHolder holder, int position, String bean) {
                 Log.i("===bindData","=========="+position);
                 holder.setText(R.id.tv,bean);
+                TextView textView = holder.getTextView(R.id.tv);
+                Random random = new Random();
+                int i = random.nextInt(160) + 130;
+
+                textView.setHeight(i);
             }
         };
+        TextView textView = new TextView(this);
+        textView.setText("Android!");
+        textView.setBackgroundColor(Color.BLUE);
+
+
+        TextView textView2 = new TextView(this);
+        textView2.setText("IOS!");
+        textView2.setBackgroundColor(Color.GREEN);
+
+        myAdapter.addHeaderView(textView);
+        myAdapter.addFooterView(textView2);
+
         myAdapter.setOnLoadMoreListener(new MyLoadMoreAdapter.OnLoadMoreListener() {
             @Override
             public void loadMore() {
@@ -39,15 +62,20 @@ public class MainActivity extends AppCompatActivity {
 
         View bannerView = LayoutInflater.from(this).inflate(R.layout.test_item, (ViewGroup) recyclerView.getParent(), false);
 
-        myAdapter.addHeaderView(bannerView);
+//        myAdapter.addHeaderView(bannerView);
 
 
         List<String> list=new ArrayList<>();
-        list.add("1");
-        list.add("2");
-//        myAdapter.setList(list);
+        for (int i = 0; i < 30; i++) {
+            list.add("content"+i);
+        }
+        myAdapter.setList(list);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new BaseDividerGridItem(this,50),0);
+
+//        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL));
+        recyclerView.setLayoutManager(new GridLayoutManager(this,3));
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(myAdapter);
     }
 }
