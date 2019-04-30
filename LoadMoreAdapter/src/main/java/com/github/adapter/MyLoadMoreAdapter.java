@@ -5,11 +5,13 @@ import android.graphics.Color;
 import android.os.Handler;
 import android.support.annotation.ColorRes;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.SparseArrayCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,6 +107,7 @@ public abstract class MyLoadMoreAdapter<T> extends MyBaseRecyclerAdapter<T> {
         getCustomViewStr();
         getCustomView();
     }
+
     public MyLoadMoreAdapter(Context mContext, int layoutId, int pageSize, NestedScrollView nestedScrollView) {
         super(mContext, layoutId);
         getCustomViewStr();
@@ -136,15 +139,15 @@ public abstract class MyLoadMoreAdapter<T> extends MyBaseRecyclerAdapter<T> {
     private void getCustomViewStr() {
         String loadText = getLoadViewText();
         if (loadText != null) {
-            loadViewText=loadText;
+            loadViewText = loadText;
         }
         String noMoreText = getNoMoreViewText();
         if (noMoreViewText != null) {
-            noMoreViewText=noMoreText;
+            noMoreViewText = noMoreText;
         }
         String errorText = getErrorViewText();
         if (errorViewText != null) {
-            errorViewText=errorText;
+            errorViewText = errorText;
         }
     }
 
@@ -186,7 +189,6 @@ public abstract class MyLoadMoreAdapter<T> extends MyBaseRecyclerAdapter<T> {
     public String getErrorViewText() {
         return errorViewText;
     }
-
 
 
     public void setTestListSize(int testListSize) {
@@ -284,7 +286,7 @@ public abstract class MyLoadMoreAdapter<T> extends MyBaseRecyclerAdapter<T> {
                     });
                 }
             } else {
-                if(holder.bottomView!=null){
+                if (holder.bottomView != null) {
                     holder.bottomView.setOnClickListener(null);
                 }
                 switch (holder.getItemViewType()) {
@@ -377,11 +379,11 @@ public abstract class MyLoadMoreAdapter<T> extends MyBaseRecyclerAdapter<T> {
 
     @Override
     public int getItemCount() {
-        int otherSize=getLoadMoreViewCount() + getHeaderCount() + getFooterCount();
+        int otherSize = getLoadMoreViewCount() + getHeaderCount() + getFooterCount();
         if (testListSize > 0) {
             return testListSize + otherSize;
         }
-        return mList == null ? otherSize: mList.size() + otherSize;
+        return mList == null ? otherSize : mList.size() + otherSize;
     }
 
     public void addHeaderView(View view) {
@@ -608,6 +610,16 @@ public abstract class MyLoadMoreAdapter<T> extends MyBaseRecyclerAdapter<T> {
                 }
             });
 //            gridLayoutManager.setSpanCount(gridLayoutManager.getSpanCount());
+        }
+    }
+
+    @Override
+    public void onViewAttachedToWindow(@NonNull MyRecyclerViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
+        if (layoutParams != null && layoutParams instanceof StaggeredGridLayoutManager.LayoutParams) {
+            StaggeredGridLayoutManager.LayoutParams sglm = (StaggeredGridLayoutManager.LayoutParams) layoutParams;
+            sglm.setFullSpan(true);
         }
     }
 }
