@@ -84,10 +84,10 @@ public class BaseDividerGridItem extends RecyclerView.ItemDecoration {
     }
 
     private int getAdapterBottomViewCount(RecyclerView parent) {
-        RecyclerView.Adapter adapter = parent.getAdapter();
+        /*RecyclerView.Adapter adapter = parent.getAdapter();
         if (adapter instanceof MyLoadMoreAdapter && ((MyLoadMoreAdapter) adapter).onLoadMoreListener != null) {
             return ((MyLoadMoreAdapter) adapter).getLoadMoreViewCount();
-        }
+        }*/
         return 0;
     }
 
@@ -196,7 +196,7 @@ public class BaseDividerGridItem extends RecyclerView.ItemDecoration {
         return false;
     }
 
-    private boolean isLastRaw(RecyclerView parent, int pos, int spanCount,int childCount) {
+    private boolean isLastRaw(RecyclerView parent, int pos, int spanCount, int childCount) {
         pos=pos-dividerHelper.getHeaderViewCount(parent.getAdapter());
         LayoutManager layoutManager = parent.getLayoutManager();
         if (layoutManager instanceof GridLayoutManager) {
@@ -246,12 +246,12 @@ public class BaseDividerGridItem extends RecyclerView.ItemDecoration {
             if(dividerHelper.getFooterViewCount(adapter)>0&&itemPosition==parent.getAdapter().getItemCount()-1){
                 // 如果是最后一个是脚布局，这不需要偏移顶部
                 outRect.set(0,0,0,0);
-            }else if(itemPosition==parent.getAdapter().getItemCount()-1&&adapter instanceof MyLoadMoreAdapter&&((MyLoadMoreAdapter) adapter).onLoadMoreListener!=null) {
+            }else /*if(itemPosition==parent.getAdapter().getItemCount()-1&&adapter instanceof MyLoadMoreAdapter&&((MyLoadMoreAdapter) adapter).onLoadMoreListener!=null) {
                 // 如果是最后一行，则不需要绘制底部
                 outRect.set(0,0, 0, 0);
             }else if(itemPosition==parent.getAdapter().getItemCount()-1&&adapter instanceof MyLoadMoreAdapter &&((MyLoadMoreAdapter) adapter).onLoadMoreListener!=null){
                 outRect.set(0,0, 0, 0);
-            }else if(isLastColum(parent, itemPosition, spanCount,  childCount-getAdapterBottomViewCount(parent))&&isLastRaw(parent, itemPosition, spanCount, childCount-getAdapterBottomViewCount(parent))){
+            }else */if(isLastColum(parent, itemPosition, spanCount,  childCount-getAdapterBottomViewCount(parent))&&isLastRaw(parent, itemPosition, spanCount, childCount-getAdapterBottomViewCount(parent))){
                 //既是最后一个行又是最后一列
                 outRect.set(0,0, 0, 0);
             }else if(itemPosition<dividerHelper.getHeaderViewCount(parent.getAdapter())){
@@ -273,12 +273,12 @@ public class BaseDividerGridItem extends RecyclerView.ItemDecoration {
             if(dividerHelper.getFooterViewCount(adapter)>0&&itemPosition==parent.getAdapter().getItemCount()-1){
                 // 如果是最后一个是脚布局，这不需要偏移底部
                 outRect.set(0,0,0, 0);
-            }else if(itemPosition==parent.getAdapter().getItemCount()-1&&adapter instanceof MyLoadMoreAdapter&&((MyLoadMoreAdapter) adapter).onLoadMoreListener!=null) {
+            }else /*if(itemPosition==parent.getAdapter().getItemCount()-1&&adapter instanceof MyLoadMoreAdapter&&((MyLoadMoreAdapter) adapter).onLoadMoreListener!=null) {
                 // 如果是最后一行，则不需要绘制底部
                 outRect.set(0,0,0,0);
             }else if(itemPosition==parent.getAdapter().getItemCount()-1&&adapter instanceof MyLoadMoreAdapter &&((MyLoadMoreAdapter) adapter).onLoadMoreListener!=null) {
                 outRect.set(0,0,0,0);
-            }else if(isLastColum(parent, itemPosition, spanCount,  childCount-getAdapterBottomViewCount(parent))&&isLastRaw(parent, itemPosition, spanCount, childCount-getAdapterBottomViewCount(parent))){
+            }else*/ if(isLastColum(parent, itemPosition, spanCount,  childCount-getAdapterBottomViewCount(parent))&&isLastRaw(parent, itemPosition, spanCount, childCount-getAdapterBottomViewCount(parent))){
                 //既是最后一个行又是最后一列
                 outRect.set(0,0, 0, 0);
             }else if(itemPosition<dividerHelper.getHeaderViewCount(parent.getAdapter())){

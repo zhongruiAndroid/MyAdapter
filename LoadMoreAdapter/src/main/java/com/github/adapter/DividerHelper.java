@@ -59,7 +59,7 @@ public class DividerHelper {
     }
     public boolean isMyAdapter(RecyclerView.Adapter adapter){
 //        return true;
-        return adapter instanceof MyLoadMoreAdapter;
+        return false;
     }
 
     public int getViewCount(RecyclerView.Adapter adapter){
@@ -69,21 +69,22 @@ public class DividerHelper {
         return adapter.getItemCount();
     }
     public int getHeaderViewCount(RecyclerView.Adapter adapter){
-        if(adapter instanceof MyLoadMoreAdapter){
-            return ((MyLoadMoreAdapter) adapter).getHeaderCount();
-        }else{
+//        if(adapter instanceof MyLoadMoreAdapter){
+//            return ((MyLoadMoreAdapter) adapter).getHeaderCount();
+//        }else{
             return 0;
-        }
+//        }
     }
     public int getFooterViewCount(RecyclerView.Adapter adapter){
-        if(adapter instanceof MyLoadMoreAdapter){
-            return ((MyLoadMoreAdapter) adapter).getFooterCount();
-        }else{
+//        if(adapter instanceof MyLoadMoreAdapter){
+//            return ((MyLoadMoreAdapter) adapter).getFooterCount();
+//        }else{
             return 0;
-        }
+//        }
     }
     public boolean isFooterViewPos(int position,RecyclerView.Adapter adapter) {
-        int loadMoreViewCount=0;
+        return false;
+        /*int loadMoreViewCount=0;
         int dataCount=adapter.getItemCount();
         if(adapter instanceof MyLoadMoreAdapter &&((MyLoadMoreAdapter) adapter).onLoadMoreListener!=null){
             loadMoreViewCount=1;
@@ -95,6 +96,6 @@ public class DividerHelper {
             return true;
         } else {
             return false;
-        }
+        }*/
     }
 }
