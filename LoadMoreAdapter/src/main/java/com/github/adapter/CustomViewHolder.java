@@ -46,7 +46,7 @@ public class CustomViewHolder extends RecyclerView.ViewHolder{
     public ImageView getImageView(int viewId){
         return getView(viewId);
     }
-    public ImageView getTextView(int viewId){
+    public TextView getTextView(int viewId){
         return getView(viewId);
     }
     /******************************TextView************************************/

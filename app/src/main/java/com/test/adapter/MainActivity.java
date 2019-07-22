@@ -14,8 +14,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.adapter.BaseDividerGridItem;
-import com.github.adapter.MyLoadMoreAdapter;
-import com.github.adapter.MyRecyclerViewHolder;
+import com.github.adapter.CustomViewHolder;
+import com.github.adapter.LoadInter;
+import com.github.adapter.LoadMoreAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView recyclerView=findViewById(R.id.rv);
         MyAdapter myAdapter = new MyAdapter<String>(this, R.layout.test_item, 15) {
             @Override
-            public void bindData(MyRecyclerViewHolder holder, int position, String bean) {
+            public void bindData(CustomViewHolder holder, int position, String bean) {
                 Log.i("===bindData","=========="+position);
                 holder.setText(R.id.tv,bean);
                 TextView textView = holder.getTextView(R.id.tv);
@@ -52,9 +53,9 @@ public class MainActivity extends AppCompatActivity {
         myAdapter.addHeaderView(textView);
         myAdapter.addFooterView(textView2);
 
-        myAdapter.setOnLoadMoreListener(new MyLoadMoreAdapter.OnLoadMoreListener() {
+        myAdapter.setOnLoadMoreListener(new LoadMoreAdapter.OnLoadMoreListener() {
             @Override
-            public void loadMore() {
+            public void loadMore(LoadInter loadInter) {
 
             }
         });

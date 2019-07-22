@@ -8,20 +8,18 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.ViewGroup;
 
-import com.github.adapter.MyLoadMoreAdapter;
-import com.github.adapter.MyRecyclerViewHolder;
+import com.github.adapter.CustomViewHolder;
+import com.github.adapter.LoadMoreAdapter;
 
 
-public abstract class MyAdapter<T> extends MyLoadMoreAdapter<T> {
+public abstract class MyAdapter<T> extends LoadMoreAdapter<T> {
+    Context mContext;
     public MyAdapter(Context mContext, int layoutId, int pageSize) {
-        super(mContext, layoutId, pageSize);
+        super( layoutId, pageSize);
+        this.mContext=mContext;
     }
-    public MyAdapter(Context mContext, int layoutId, int pageSize, NestedScrollView nestedScrollView) {
-        super(mContext, layoutId, pageSize, nestedScrollView);
-    }
-
     @Override
-    public void onViewAttachedToWindow(@NonNull MyRecyclerViewHolder holder) {
+    public void onViewAttachedToWindow(@NonNull CustomViewHolder holder) {
         super.onViewAttachedToWindow(holder);
 
         ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
