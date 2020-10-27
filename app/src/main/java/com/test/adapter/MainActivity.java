@@ -1,6 +1,7 @@
 package com.test.adapter;
 
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,6 +18,7 @@ import com.github.adapter.BaseDividerGridItem;
 import com.github.adapter.CustomViewHolder;
 import com.github.adapter.LoadInter;
 import com.github.adapter.LoadMoreAdapter;
+import com.test.adapter.dividerline.BaseItemDivider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
                 Random random = new Random();
                 int i = random.nextInt(160) + 130;
 
-                textView.setHeight(i);
+                textView.setHeight(288);
             }
         };
         TextView textView = new TextView(this);
@@ -71,8 +73,12 @@ public class MainActivity extends AppCompatActivity {
             list.add("content"+i);
         }
         myAdapter.setList(list);
-
-        recyclerView.addItemDecoration(new BaseDividerGridItem(this,50),0);
+        BaseItemDivider baseItemDivider = new BaseItemDivider(this, 50, ContextCompat.getColor(this, R.color.c_divider));
+        baseItemDivider.setSkipStartCount(2);
+        baseItemDivider.setSkipEndCount(3);
+//        baseItemDivider.setShowLastLine(true);
+        recyclerView.addItemDecoration(baseItemDivider);
+//        recyclerView.addItemDecoration(new BaseDividerGridItem(this,50),0);
 
 //        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL));
         recyclerView.setLayoutManager(new GridLayoutManager(this,3));

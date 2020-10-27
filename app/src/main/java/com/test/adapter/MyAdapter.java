@@ -31,7 +31,7 @@ public abstract class MyAdapter<T> extends LoadMoreAdapter<T> {
         }
     }
 
-    @Override
+   /* @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
 
@@ -50,5 +50,5 @@ public abstract class MyAdapter<T> extends LoadMoreAdapter<T> {
                 }
             });
         }
-    }
+    }*/
 }
