@@ -20,22 +20,6 @@ import java.util.List;
  *   created by android on 2019/4/29
  */
 public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHolder> {
-    /********************************header********************************/
-    public interface OnHeaderClickListener {
-        public void onHeaderClick(View itemView, int position);
-    }
-    public interface OnHeaderLongClickListener {
-        public void onHeaderLongClick(View itemView, int position);
-    }
-
-    /********************************footer********************************/
-    public interface OnFooterClickListener {
-        public void onFooterClick(View itemView, int position);
-    }
-    public interface OnFooterLongClickListener {
-        public void onFooterLongClick(View itemView, int position);
-    }
-
 
     protected List<T> mList;
     protected LayoutInflater mInflater;
@@ -53,10 +37,10 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
     protected SparseArrayCompat<View> footerView;
 
 
-    protected OnHeaderClickListener mHeaderClickListener;
-    protected OnHeaderLongClickListener mHeaderLongClickListener;
-    protected OnFooterClickListener mFooterClickListener;
-    protected OnFooterLongClickListener mFooterLongClickListener;
+    protected AdapterOnClickListener mHeaderClickListener;
+    protected AdapterOnClickListener mHeaderLongClickListener;
+    protected AdapterOnClickListener mFooterClickListener;
+    protected AdapterOnClickListener mFooterLongClickListener;
 
 
     public abstract void bindData(CustomViewHolder holder, int position, T item);
@@ -332,19 +316,19 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
         mLongClickListener = listener;
     }
 
-    public void setOnHeaderClickListener(OnHeaderClickListener listener) {
+    public void setOnHeaderClickListener(AdapterOnClickListener listener) {
         mHeaderClickListener = listener;
     }
 
-    public void setOnHeaderLongClickListener(OnHeaderLongClickListener listener) {
+    public void setOnHeaderLongClickListener(AdapterOnClickListener listener) {
         mHeaderLongClickListener = listener;
     }
 
-    public void setOnFooterClickListener(OnFooterClickListener listener) {
+    public void setOnFooterClickListener(AdapterOnClickListener listener) {
         mFooterClickListener = listener;
     }
 
-    public void setOnFooterLongClickListener(OnFooterLongClickListener listener) {
+    public void setOnFooterLongClickListener(AdapterOnClickListener listener) {
         mFooterLongClickListener = listener;
     }
 
@@ -354,7 +338,7 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mHeaderClickListener.onHeaderClick(holder.itemView, holder.getAdapterPosition());
+                    mHeaderClickListener.onItemClick(holder.itemView, holder.getAdapterPosition());
                 }
             });
         }
@@ -365,7 +349,7 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    mHeaderLongClickListener.onHeaderLongClick(holder.itemView, holder.getAdapterPosition());
+                    mHeaderLongClickListener.onItemClick(holder.itemView, holder.getAdapterPosition());
                     return true;
                 }
             });
@@ -377,7 +361,7 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    mFooterLongClickListener.onFooterLongClick(holder.itemView, holder.getAdapterPosition());
+                    mFooterLongClickListener.onItemClick(holder.itemView, holder.getAdapterPosition());
                     return true;
                 }
             });
@@ -389,7 +373,7 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mFooterClickListener.onFooterClick(holder.itemView, holder.getAdapterPosition());
+                    mFooterClickListener.onItemClick(holder.itemView, holder.getAdapterPosition());
                 }
             });
         }
