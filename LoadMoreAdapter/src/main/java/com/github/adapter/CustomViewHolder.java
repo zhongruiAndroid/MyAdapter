@@ -21,18 +21,6 @@ public class CustomViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         sparseView = new SparseArrayCompat<>();
     }
-
-
-    public static CustomViewHolder createViewHolder(Context context, int layoutId, ViewGroup parent) {
-        View itemView = LayoutInflater.from(context).inflate(layoutId, parent, false);
-        return new CustomViewHolder(itemView);
-    }
-
-    public static CustomViewHolder createViewHolder(Context context, LayoutInflater inflater, int layoutId, ViewGroup parent) {
-        View itemView = inflater.inflate(layoutId, parent, false);
-        return new CustomViewHolder(itemView);
-    }
-
     public <T extends View> T getView(int viewId) {
         View view = sparseView.get(viewId);
         if (view == null) {
