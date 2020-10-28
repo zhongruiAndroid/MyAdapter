@@ -25,7 +25,6 @@ import java.util.List;
  *   created by android on 2019/4/29
  */
 public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> {
-    private Handler handler;
     private long click_interval = 900; // 阻塞时间间隔
     private long lastClickTime;
     private int pageSize;
@@ -163,10 +162,7 @@ public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> {
         }
     }
     private Handler getHandler(){
-        if(handler==null){
-            handler=new Handler(Looper.getMainLooper());
-        }
-        return handler;
+        return HandlerUtils.get();
     }
 
     public View getLoadView() {
