@@ -127,12 +127,13 @@ class DividerHelper {
         return (position + 1) % spanCount == 0;
     }
 
-    protected static boolean isGridLastRaw(int position, int spanCount, int childCount) {
-        int ranger = childCount % spanCount;
+    protected static boolean isGridLastRaw(int position, int spanCount, int itemCount, int skipCount) {
+        itemCount=itemCount-skipCount;
+        int ranger = itemCount % spanCount;
         if (ranger == 0) {
             ranger = spanCount;
         }
-        return position >= childCount - ranger;
+        return position >= itemCount - ranger;
     }
 
 
