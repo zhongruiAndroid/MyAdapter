@@ -171,7 +171,7 @@ public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> implements Loa
         return HandlerUtils.get();
     }
 
-    private void completeRequest() {
+    protected void completeRequest() {
         isEndRequest = true;
     }
 
@@ -185,7 +185,7 @@ public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> implements Loa
         return super.getBottomViewCount() + loadViewSize;
     }
 
-    private void setCurrentStatus(int currentStatus) {
+    protected void setCurrentStatus(int currentStatus) {
         this.currentStatus = currentStatus;
     }
 
