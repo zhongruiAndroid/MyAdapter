@@ -57,6 +57,7 @@ public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> implements Loa
         } else {
             notifyItemChanged(size);
         }
+        /*下拉刷新时，notifyItemChanged崩溃，可用handler post执行*/
     }
 
 
