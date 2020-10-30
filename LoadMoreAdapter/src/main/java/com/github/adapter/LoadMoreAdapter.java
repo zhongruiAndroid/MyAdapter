@@ -1,17 +1,12 @@
 package com.github.adapter;
 
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Handler;
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.Calendar;
 
@@ -23,10 +18,7 @@ public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> implements Loa
     private long lastClickTime;
     private final int view_type_load = 70000;
 
-    private View loadView;
-    private View errorView;
-    private View noMoreView;
-
+    private LoadView loadLayout;
 
     /*显示加载更多*/
     public static final int status_load = 8000;
@@ -34,18 +26,10 @@ public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> implements Loa
     public static final int status_no_more = 8001;
     /*加载失败*/
     public static final int status_error = 8002;
-    /*不显示加载view*/
-    public static final int status_default = 8003;
 
-    private int currentStatus = status_default;
+    private int currentStatus = status_no_more;
     /*** 是否隐藏暂无内容的提示*/
     private boolean isHiddenNoMoreView = false;
-    private String loadViewText = "正在加载更多...";
-    private String noMoreViewText = "暂无更多";
-    private String errorViewText = "加载失败,点击重试";
-    private int loadViewHeight = 40;
-
-    private int bottomViewBackground = Color.TRANSPARENT;
 
     /*是否请求完成，防止上滑下滑重复触发请求*/
     private boolean isEndRequest = true;
@@ -63,13 +47,15 @@ public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> implements Loa
         setHiddenNoMoreView(hiddenNoMoreView);
         setCurrentStatus(hasMore ? status_load : status_no_more);
         completeRequest();
-        if(!hasMore){
-            int size = getDataCount() + getHeaderCount() + getFooterCount();
-            if(hiddenNoMoreView){
+        int size = getDataCount() + getHeaderCount() + getFooterCount();
+        if (!hasMore) {
+            if (hiddenNoMoreView) {
                 this.notifyItemRemoved(size);
-            }else{
+            } else {
                 notifyItemChanged(size);
             }
+        } else {
+            notifyItemChanged(size);
         }
     }
 
@@ -78,11 +64,11 @@ public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> implements Loa
     public void loadError() {
         setCurrentStatus(status_error);
         completeRequest();
-        notifyItemChanged(getItemCount()-1);
+        notifyItemChanged(getItemCount() - 1);
     }
 
     public interface OnLoadMoreListener {
-        void loadMore(LoadMoreAdapter adapter);
+        void loadMore(LoadListener loadListener);
     }
 
     public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
@@ -91,16 +77,16 @@ public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> implements Loa
 
     public LoadMoreAdapter(int layoutId) {
         super(layoutId);
-        loadView = getLoadView();
-        errorView = getErrorView();
-        noMoreView = getNoMoreView();
+    }
 
-        loadViewText = getLoadViewText();
-        noMoreViewText = getNoMoreViewText();
-        errorViewText = getErrorViewText();
-        loadViewHeight = getLoadViewHeight();
-        bottomViewBackground = getBottomViewBackground();
-
+    public void setLoadLayout(LoadView loadLayout) {
+        this.loadLayout = loadLayout;
+    }
+    public LoadView getLoadLayout() {
+        if (loadLayout == null) {
+            loadLayout=new LoadView();
+        }
+        return loadLayout;
     }
 
     @Override
@@ -114,7 +100,7 @@ public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> implements Loa
     @Override
     public int getItemCount() {
         int size = getDataCount() + getHeaderCount() + getFooterCount();
-        if ((isHiddenNoMoreView() && status_no_more == currentStatus) || currentStatus == status_default) {
+        if ((isHiddenNoMoreView() && status_no_more == currentStatus)) {
             /*不显示底部loadview*/
             return size;
         }
@@ -125,11 +111,11 @@ public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> implements Loa
     @Override
     public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         if (isLoadViewType(viewType)) {
-            CustomViewHolder viewHolder = new CustomViewHolder(getLoadStatusView(viewGroup.getContext()));
-            if (currentStatus == status_error) {
-                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+            CustomViewHolder viewHolder = new CustomViewHolder(getLoadLayout().getLayout(viewGroup.getContext(), getCurrentStatus()));
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (currentStatus == status_error) {
                         long currentTime = Calendar.getInstance().getTimeInMillis();
                         long interval = currentTime - lastClickTime;
                         if (interval >= click_interval) {
@@ -140,8 +126,9 @@ public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> implements Loa
                         }
                         lastClickTime = currentTime;
                     }
-                });
-            }
+                }
+            });
+
             return viewHolder;
         }
 
@@ -152,6 +139,7 @@ public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> implements Loa
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder viewHolder, int position) {
         if (isLoadViewType(getItemViewType(position))) {
+            getLoadLayout().changeLoadView((ViewGroup) viewHolder.itemView, getCurrentStatus());
             if (getCurrentStatus() == status_load && position != 0) {
                 //如果postion等于0，只有loadmoreview的时候,
                 // 防止adapter初始化还没真正设置数据时自动加载更多
@@ -183,66 +171,6 @@ public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> implements Loa
         return HandlerUtils.get();
     }
 
-    public View getLoadView() {
-        return loadView;
-    }
-
-    public View getErrorView() {
-        return errorView;
-    }
-
-    public View getNoMoreView() {
-        return noMoreView;
-    }
-
-    private View getLoadStatusView(Context context) {
-        View view = null;
-        switch (currentStatus) {
-            case status_load:
-                /*显示加载更多*/
-                if (getLoadView() != null) {
-                    view = getLoadView();
-                } else {
-                    view = getDefaultView(context, loadViewText);
-                }
-                break;
-            case status_no_more:
-                /*暂无更多数据*/
-                if (getNoMoreView() != null) {
-                    view = getLoadView();
-                } else {
-                    view = getDefaultView(context, noMoreViewText);
-                }
-                break;
-            case status_error:
-                /*加载失败*/
-                if (getErrorView() != null) {
-                    view = getLoadView();
-                } else {
-                    view = getDefaultView(context, errorViewText);
-                }
-                break;
-        }
-        return view;
-    }
-
-    private TextView getDefaultView(Context context, String text) {
-        TextView textView = new TextView(context);
-        textView.setGravity(Gravity.CENTER);
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp2px(context, loadViewHeight));
-        textView.setLayoutParams(layoutParams);
-        textView.setBackgroundColor(bottomViewBackground);
-        textView.setText(text);
-        return textView;
-    }
-
-
-    private int dp2px(Context context, float dipValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dipValue * scale);
-    }
-
-
     private void completeRequest() {
         isEndRequest = true;
     }
@@ -250,7 +178,7 @@ public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> implements Loa
     @Override
     protected int getBottomViewCount() {
         int loadViewSize = 1;
-        if ((isHiddenNoMoreView() && status_no_more == currentStatus) || currentStatus == status_default) {
+        if ((isHiddenNoMoreView() && status_no_more == currentStatus)) {
             /*不显示底部loadview*/
             loadViewSize = 0;
         }
@@ -265,64 +193,12 @@ public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> implements Loa
         return currentStatus;
     }
 
-    public void setLoadView(View loadView) {
-        this.loadView = loadView;
-    }
-
-    public void setErrorView(View errorView) {
-        this.errorView = errorView;
-    }
-
-    public void setNoMoreView(View noMoreView) {
-        this.noMoreView = noMoreView;
-    }
-
     public void setHiddenNoMoreView(boolean hiddenNoMoreView) {
         isHiddenNoMoreView = hiddenNoMoreView;
     }
 
-    public void setLoadViewText(String loadViewText) {
-        this.loadViewText = loadViewText;
-    }
-
-    public void setNoMoreViewText(String noMoreViewText) {
-        this.noMoreViewText = noMoreViewText;
-    }
-
-    public void setErrorViewText(String errorViewText) {
-        this.errorViewText = errorViewText;
-    }
-
-    public void setLoadViewHeight(int loadViewHeight) {
-        this.loadViewHeight = loadViewHeight;
-    }
-
-    public void setBottomViewBackground(@ColorInt int bottomViewBackground) {
-        this.bottomViewBackground = bottomViewBackground;
-    }
-
     public boolean isHiddenNoMoreView() {
         return isHiddenNoMoreView;
-    }
-
-    public String getLoadViewText() {
-        return loadViewText;
-    }
-
-    public String getNoMoreViewText() {
-        return noMoreViewText;
-    }
-
-    public String getErrorViewText() {
-        return errorViewText;
-    }
-
-    public int getLoadViewHeight() {
-        return loadViewHeight;
-    }
-
-    public int getBottomViewBackground() {
-        return bottomViewBackground;
     }
 
     @Override

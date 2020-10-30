@@ -14,10 +14,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.adapter.CustomViewHolder;
+import com.github.adapter.LoadListener;
 import com.github.adapter.LoadMoreAdapter;
 import com.github.adapter.listener.AdapterOnClickListener;
 import com.test.adapter.dividerline.BaseItemDivider;
 import com.test.adapter.test.TestAdapterActivity;
+import com.test.adapter.testload.TestLoadActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, TestAdapterActivity.class));
+            }
+        });
+        View btTestLoadAdapter = findViewById(R.id.btTestLoadAdapter);
+        btTestLoadAdapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, TestLoadActivity.class));
             }
         });
         RecyclerView recyclerView = findViewById(R.id.rv);
@@ -76,8 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
         myAdapter.setOnLoadMoreListener(new LoadMoreAdapter.OnLoadMoreListener() {
             @Override
-            public void loadMore(LoadMoreAdapter adapter) {
-
+            public void loadMore(LoadListener loadListener) {
             }
         });
         myAdapter.setOnFooterClickListener(new AdapterOnClickListener() {

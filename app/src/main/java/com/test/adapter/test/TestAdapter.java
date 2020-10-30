@@ -20,12 +20,13 @@ import java.util.List;
 public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder> {
     private List<String> list=new ArrayList<>();
     public TestViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new TestViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.test_adapter_item,viewGroup,false),this);
+        TestViewHolder testViewHolder = new TestViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.test_adapter_item, viewGroup, false), this);
+        Log.i("=====","=====onCreateViewHolder"+testViewHolder.getAdapterPosition());
+        return testViewHolder;
     }
     public void setList(List<String> list) {
         this.list = list;
     }
-
     @Override
     public void onBindViewHolder(@NonNull final TestViewHolder holder, final int position) {
         Log.i("=====","=====onBindViewHolder:"+position);
@@ -33,7 +34,7 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
         holder.btNotify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(v.getContext(),position+"=");
+                showDialog(v.getContext(),position+"="+holder.getAdapterPosition());
 //                TestAdapter.this.notifyDataSetChanged();
             }
         });
@@ -41,11 +42,11 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
             @Override
             public void onClick(View v) {
                 getList().add(position,"newData"+position);
-                getList().add(position+1,"newData"+position);
-                getList().add(position+2,"newData"+position);
+//                getList().add(position+1,"newData"+position);
+//                getList().add(position+2,"newData"+position);
 //                notifyDataSetChanged();
-                notifyItemRangeInserted(position,3);
-                notifyItemRangeChanged(position,getList().size());
+                notifyItemRangeInserted(position,1);
+//                notifyItemRangeChanged(position,getList().size());
            /*     holder.itemView.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -73,6 +74,7 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.TestViewHolder
     }
     @Override
     public int getItemCount() {
+        Log.i("=====","=====getItemCount"+(list==null?0:list.size()));
         return list==null?0:list.size();
     }
 
