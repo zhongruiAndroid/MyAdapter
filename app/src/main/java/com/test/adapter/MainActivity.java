@@ -1,24 +1,23 @@
 package com.test.adapter;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.github.adapter.CustomAdapter;
 import com.github.adapter.CustomViewHolder;
-import com.github.adapter.LoadInter;
 import com.github.adapter.LoadMoreAdapter;
+import com.github.adapter.listener.AdapterOnClickListener;
 import com.test.adapter.dividerline.BaseItemDivider;
+import com.test.adapter.test.TestAdapterActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +29,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        View btTestAdapter = findViewById(R.id.btTestAdapter);
+        btTestAdapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, TestAdapterActivity.class));
+            }
+        });
         RecyclerView recyclerView = findViewById(R.id.rv);
         MyAdapter myAdapter = new MyAdapter<String>(this, R.layout.test_item, 15) {
             @Override
@@ -70,13 +76,13 @@ public class MainActivity extends AppCompatActivity {
 
         myAdapter.setOnLoadMoreListener(new LoadMoreAdapter.OnLoadMoreListener() {
             @Override
-            public void loadMore(LoadInter loadInter) {
+            public void loadMore(LoadMoreAdapter adapter) {
 
             }
         });
-        myAdapter.setOnFooterClickListener(new CustomAdapter.OnFooterClickListener() {
+        myAdapter.setOnFooterClickListener(new AdapterOnClickListener() {
             @Override
-            public void onFooterClick(View itemView, int position) {
+            public void onItemClick(View itemView, int position) {
 
             }
         });

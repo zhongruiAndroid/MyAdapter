@@ -21,8 +21,6 @@ import java.util.List;
 public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHolder> {
 
     protected List<T> mList;
-    protected List headerList;
-    protected List footerList;
     protected LayoutInflater mInflater;
     protected int layoutId;
 
@@ -30,8 +28,8 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
     protected AdapterOnClickListener mLongClickListener;
 
 
-    private final int header_view = 50000;
-    private final int footer_view = 60000;
+    private final int view_type_header = 50000;
+    private final int view_type_footer = 60000;
     protected SparseArrayCompat<View> headerView;
     protected SparseArrayCompat<View> footerView;
 
@@ -64,7 +62,15 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
         }
         return super.getItemViewType(position);
     }
+    public void onCreateHeaderView(CustomViewHolder holder){
 
+    }
+    public void onCreateFooterView(CustomViewHolder holder){
+
+    }
+    public void onCreateDataView(CustomViewHolder holder){
+
+    }
     @Override
     public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         CustomViewHolder holder;
@@ -78,6 +84,7 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
                 holder = new CustomViewHolder(hView);
                 setHeaderItemClick(holder);
                 setHeaderItemLongClick(holder);
+                onCreateHeaderView(holder);
                 return holder;
             }
         }
@@ -88,6 +95,7 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
                 holder = new CustomViewHolder(fView);
                 setFooterItemClick(holder);
                 setFooterItemLongClick(holder);
+                onCreateFooterView(holder);
                 return holder;
             }
         }
@@ -100,6 +108,7 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
         }
         setItemClickListener(holder);
         setItemLongClickListener(holder);
+        onCreateDataView(holder);
         return holder;
     }
 
@@ -125,8 +134,11 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
             bindData(holder,dataPosition,mList.get(dataPosition));
         }
     }
-    public int getDataPosition(int position){
-        return position - getHeaderCount();
+    public int getDataPosition(int itemPosition){
+        return itemPosition - getHeaderCount();
+    }
+    public int getItemPosition(int dataPosition){
+        return dataPosition + getHeaderCount();
     }
     @Override
     public int getItemCount() {
@@ -151,7 +163,7 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
         if (hideNoData) {
             view.setTag(R.id.tag_layout_params, view.getLayoutParams());
         }
-        headerView.put(headerView.size() + header_view, view);
+        headerView.put(headerView.size() + view_type_header, view);
     }
     public void removeHeaderView(int position){
         removeHeaderView(position,false);
@@ -210,7 +222,7 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
         if (hideNoData) {
             view.setTag(R.id.tag_layout_params, view.getLayoutParams());
         }
-        footerView.put(footerView.size() + footer_view, view);
+        footerView.put(footerView.size() + view_type_footer, view);
     }
     public void removeFooterView(int position){
         removeFooterView(position,false);
@@ -260,7 +272,9 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
     public void setFooterView(SparseArrayCompat<View> footerViewList) {
         this.footerView = footerViewList;
     }
-
+    protected int getBottomViewCount(){
+        return getFooterCount();
+    }
     public void setList(List<T> list) {
         setList(list, false);
     }
@@ -281,31 +295,49 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
     }
 
     public void addList(List<T> list, boolean isNotifyData) {
-        if (this.mList == null) {
-            this.mList = new ArrayList<>();
+        if(list==null||list.size()<=0){
+            return;
         }
-        if (list != null) {
-            this.mList.addAll(list);
-        }
+        getList().addAll(list);
         if (isNotifyData) {
-            notifyDataSetChanged();
+            if(list.size()==this.mList.size()){
+                notifyDataSetChanged();
+            }else{
+                int insertPosition = mList.size() - list.size() + getHeaderCount();
+                notifyItemRangeInserted(insertPosition,list.size());
+            }
+        }
+    }
+    public void addData(T data){
+        addData(data,false);
+    }
+    public void addData(T data, boolean isNotifyData) {
+        if(data==null){
+            return;
+        }
+        getList().add(data);
+        if(isNotifyData){
+            if(getList().size()==1){
+                notifyDataSetChanged();
+            }else{
+                notifyItemInserted(getList().size()+getHeaderCount()-1);
+            }
         }
     }
 
-
     public List<T> getList() {
-        return mList;
+        return mList==null?new ArrayList<T>():mList;
     }
 
     public void delete(int position) {
-        mList.remove(position);
-        notifyItemRemoved(position);
+        delete(position,false);
     }
-
-    public void deleteNotifyData(int position, boolean isNotifyData) {
+    public void delete(int position, boolean isNotifyData) {
         mList.remove(position);
         if (isNotifyData) {
-            notifyDataSetChanged();
+            int viewPosition=position+getHeaderCount();
+            notifyItemRemoved(viewPosition);
+            notifyItemRangeChanged(viewPosition,getItemCount()-viewPosition);
         }
     }
     public void setOnItemClickListener(AdapterOnClickListener listener) {

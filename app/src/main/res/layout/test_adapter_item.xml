@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:background="#FCD3ED"
+    android:gravity="center">
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="增"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="删"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="改"
+                android:textAllCaps="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btAdd2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="增2"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btDelete2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="删2"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/btUpdate2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="改2"
+                android:textAllCaps="false" />
+        </LinearLayout>
+    </LinearLayout>
+    <Button
+        android:id="@+id/btNotify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="刷新"
+        />
+</LinearLayout>

@@ -15,7 +15,7 @@ import com.github.adapter.LoadMoreAdapter;
 public abstract class MyAdapter<T> extends LoadMoreAdapter<T> {
     Context mContext;
     public MyAdapter(Context mContext, int layoutId, int pageSize) {
-        super( layoutId, pageSize);
+        super( layoutId  );
         this.mContext=mContext;
     }
     @Override
