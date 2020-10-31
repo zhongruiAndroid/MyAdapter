@@ -12,7 +12,7 @@ import java.util.Calendar;
 public abstract class NoDoubleAdapterOnClickListener implements AdapterOnClickListener {
     private static long MIN_CLICK_DELAY_TIME = 900;
     private long lastClickTime;
-
+    private View preView;
     public NoDoubleAdapterOnClickListener() {
         this(900);
     }
@@ -27,7 +27,8 @@ public abstract class NoDoubleAdapterOnClickListener implements AdapterOnClickLi
     @Override
     public void onItemClick(View itemView, int position) {
         long currentTime = Calendar.getInstance().getTimeInMillis();
-        if (currentTime - this.lastClickTime > MIN_CLICK_DELAY_TIME) {
+        if (currentTime - this.lastClickTime > MIN_CLICK_DELAY_TIME||preView!=itemView) {
+            this.preView = itemView;
             this.lastClickTime = currentTime;
             this.onNoDoubleClick(itemView, position);
         }
