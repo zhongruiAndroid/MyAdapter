@@ -43,21 +43,26 @@ public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> implements Loa
     }
 
     @Override
-    public void loadHasMore(boolean hasMore, boolean hiddenNoMoreView) {
-        setHiddenNoMoreView(hiddenNoMoreView);
-        setCurrentStatus(hasMore ? status_load : status_no_more);
-        completeRequest();
-        int size = getDataCount() + getHeaderCount() + getFooterCount();
-        if (!hasMore) {
-            if (hiddenNoMoreView) {
-                this.notifyItemRemoved(size);
-            } else {
-                notifyItemChanged(size);
+    public void loadHasMore(final boolean hasMore,final boolean hiddenNoMoreView) {
+        HandlerUtils.get().post(new Runnable() {
+            @Override
+            public void run() {
+                /*下拉刷新时，notifyItemChanged崩溃，可用handler post执行*/
+                setHiddenNoMoreView(hiddenNoMoreView);
+                setCurrentStatus(hasMore ? status_load : status_no_more);
+                completeRequest();
+                int size = getDataCount() + getHeaderCount() + getFooterCount();
+                if (!hasMore) {
+                    if (hiddenNoMoreView) {
+                        notifyItemRemoved(size);
+                    } else {
+                        notifyItemChanged(size);
+                    }
+                } else {
+                    notifyItemChanged(size);
+                }
             }
-        } else {
-            notifyItemChanged(size);
-        }
-        /*下拉刷新时，notifyItemChanged崩溃，可用handler post执行*/
+        });
     }
 
 
