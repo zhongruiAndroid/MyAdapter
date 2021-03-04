@@ -208,6 +208,12 @@ public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> implements Loa
     }
 
     @Override
+    protected boolean needSetSpanSize(int position) {
+        int viewType = getItemViewType(position);
+        return isLoadViewType(viewType);
+    }
+
+    /*@Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         final RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
@@ -228,9 +234,17 @@ public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> implements Loa
                 }
             });
         }
+    }*/
+    @Override
+    protected boolean needSetFullSpan(CustomViewHolder holder) {
+        //如果不显示底部布局，则不用设置loadview跨列，或者不是最后一个item的position
+        if (getNotLoadViewCount() >= getItemCount() || holder.getAdapterPosition() != getItemCount() - 1) {
+            return false;
+        }
+        return true;
     }
 
-    @Override
+   /* @Override
     public void onViewAttachedToWindow(@NonNull CustomViewHolder holder) {
         super.onViewAttachedToWindow(holder);
         //如果不显示底部布局，则不用设置loadview跨列，或者不是最后一个item的position
@@ -242,7 +256,7 @@ public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> implements Loa
             StaggeredGridLayoutManager.LayoutParams sglm = (StaggeredGridLayoutManager.LayoutParams) layoutParams;
             sglm.setFullSpan(true);
         }
-    }
+    }*/
 
     public int getNotLoadViewCount() {
         return getDataCount() + getHeaderCount() + getFooterCount();

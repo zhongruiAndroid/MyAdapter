@@ -446,7 +446,7 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
             gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    if(isHeaderViewPos(position)||isFooterViewPos(position)){
+                    if(isHeaderViewPos(position)||isFooterViewPos(position)||needSetSpanSize(position)){
                         return gridLayoutManager.getSpanCount();
                     }
                     if (spanSizeLookup != null) {
@@ -457,12 +457,18 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
             });
         }
     }
+    protected boolean needSetSpanSize(int position) {
+        return false;
+    }
+    protected boolean needSetFullSpan(CustomViewHolder holder) {
+        return false;
+    }
 
     @Override
     public void onViewAttachedToWindow(@NonNull CustomViewHolder holder) {
         super.onViewAttachedToWindow(holder);
         //如果不显示底部布局
-        if(isHeaderViewPos(holder.getAdapterPosition())||isFooterViewPos(holder.getAdapterPosition())){
+        if(isHeaderViewPos(holder.getAdapterPosition())||isFooterViewPos(holder.getAdapterPosition())||needSetFullSpan(holder)){
             ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams();
             if (layoutParams != null && layoutParams instanceof StaggeredGridLayoutManager.LayoutParams) {
                 StaggeredGridLayoutManager.LayoutParams sglm = (StaggeredGridLayoutManager.LayoutParams) layoutParams;
