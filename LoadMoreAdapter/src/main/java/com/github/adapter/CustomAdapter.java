@@ -291,36 +291,57 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
     }
 
     public void addList(List<T> list) {
-        addList(list, false);
+        addList(list, false,false);
     }
 
-    public void addList(List<T> list, boolean isNotifyData) {
+    public void addList(List<T> list, boolean isNotifyData,boolean useAnim) {
         if(list==null||list.size()<=0){
             return;
         }
         getList().addAll(list);
         if (isNotifyData) {
-            if(list.size()==this.mList.size()){
+            if(list.size()==this.mList.size()||!useAnim){
                 notifyDataSetChanged();
             }else{
                 int insertPosition = mList.size() - list.size() + getHeaderCount();
                 notifyItemRangeInserted(insertPosition,list.size());
+                notifyItemRangeChanged(insertPosition,getItemCount()-insertPosition);
             }
         }
     }
     public void addData(T data){
-        addData(data,false);
+        addData(data,false,false);
     }
-    public void addData(T data, boolean isNotifyData) {
+    public void addData(T data, boolean isNotifyData,boolean useAnim) {
         if(data==null){
             return;
         }
         getList().add(data);
         if(isNotifyData){
-            if(getList().size()==1){
+            if(getList().size()==1||!useAnim){
                 notifyDataSetChanged();
             }else{
-                notifyItemInserted(getList().size()+getHeaderCount()-1);
+                int insertPosition = getList().size() + getHeaderCount() - 1;
+                notifyItemInserted(insertPosition);
+                notifyItemRangeChanged(insertPosition,getItemCount()-insertPosition);
+            }
+        }
+    }
+    public void addData(int dataPosition,T data){
+        addData(dataPosition,data,false,false);
+    }
+    public void addData(int dataPosition,T data, boolean isNotifyData,boolean useAnim) {
+        if(data==null||dataPosition<0){
+            return;
+        }
+        getList().add(dataPosition,data);
+        if(isNotifyData){
+            if(getList().size()==1||!useAnim){
+                notifyDataSetChanged();
+            }else{
+                int itemPosition=dataPosition+getHeaderCount();
+                notifyItemInserted(itemPosition);
+                notifyItemRangeChanged(itemPosition,getItemCount()-itemPosition);
             }
         }
     }
@@ -329,15 +350,22 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
         return mList==null?new ArrayList<T>():mList;
     }
 
-    public void delete(int position) {
-        delete(position,false);
+    public void remove(int dataPosition) {
+        remove(dataPosition,false,false);
     }
-    public void delete(int position, boolean isNotifyData) {
-        mList.remove(position);
+    public void remove(int dataPosition, boolean isNotifyData,boolean useAnim) {
+        if(mList==null||dataPosition>=mList.size()||dataPosition<0){
+            return;
+        }
+        mList.remove(dataPosition);
         if (isNotifyData) {
-            int viewPosition=position+getHeaderCount();
-            notifyItemRemoved(viewPosition);
-            notifyItemRangeChanged(viewPosition,getItemCount()-viewPosition);
+            if(useAnim){
+                int itemPosition=dataPosition+getHeaderCount();
+                notifyItemRemoved(itemPosition);
+                notifyItemRangeChanged(itemPosition,getItemCount()-itemPosition);
+            }else{
+                notifyDataSetChanged();
+            }
         }
     }
     public void setOnItemClickListener(AdapterOnClickListener listener) {

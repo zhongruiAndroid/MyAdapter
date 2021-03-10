@@ -36,6 +36,11 @@ public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> implements Loa
 
     /*回调方法,触发加载更多*/
     public OnLoadMoreListener onLoadMoreListener;
+    private boolean closeLoadMore;
+
+    public void setCloseLoadMore(boolean closeLoadMore) {
+        this.closeLoadMore = closeLoadMore;
+    }
 
     @Override
     public void loadHasMore(boolean hasMore) {
@@ -106,6 +111,9 @@ public abstract class LoadMoreAdapter<T> extends CustomAdapter<T> implements Loa
     @Override
     public int getItemCount() {
         int size = getDataCount() + getHeaderCount() + getFooterCount();
+        if(closeLoadMore){
+            return size;
+        }
         if ((isHiddenNoMoreView() && status_no_more == currentStatus)) {
             /*不显示底部loadview*/
             return size;

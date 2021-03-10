@@ -45,6 +45,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, TestLoadActivity.class));
             }
         });
+        View btTestRangeItem = findViewById(R.id.btTestRangeItem);
+        btTestRangeItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, TestRangeItemActivity.class));
+            }
+        });
         RecyclerView recyclerView = findViewById(R.id.rv);
         MyAdapter myAdapter = new MyAdapter<String>(this, R.layout.test_item, 15) {
             @Override
