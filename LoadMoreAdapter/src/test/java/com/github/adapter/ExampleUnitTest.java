@@ -17,16 +17,18 @@ public class ExampleUnitTest {
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
+
     @Test
     public void asfdd() {
         System.out.println("ckcsttly1".startsWith("ckcsttly"));
     }
+
     @Test
     public void asfd() {
-        List<String> list=new ArrayList<>();
+        List<String> list = new ArrayList<>();
         list.add("1");
         list.add("2");
-        list.add(1,"3");
+        list.add(1, "3");
         System.out.println(list.get(1));
         System.out.println(list.get(2));
         /*for (int i = 0; i < list.size(); i++) {
@@ -35,5 +37,18 @@ public class ExampleUnitTest {
             }
             System.out.println(i);
         }*/
+    }
+
+    @Test
+    public void asdfd() {
+        int a = 1;
+        for (int i = 0; i < 10; i += a) {
+            System.out.println(i);
+            if (i == 3) {
+                a = 2;
+            }else{
+                a = 1;
+            }
+        }
     }
 }

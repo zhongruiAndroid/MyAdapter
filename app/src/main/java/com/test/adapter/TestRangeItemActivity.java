@@ -27,9 +27,10 @@ public class TestRangeItemActivity extends AppCompatActivity {
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter.getList().add(1,"add");
-                adapter.notifyItemInserted(1);
-                adapter.notifyItemRangeChanged(1,adapter.getItemCount()-1);
+                adapter.getList().set(1,"set");
+                adapter.notifyItemChanged(1);
+//                adapter.notifyItemInserted(1);
+//                adapter.notifyItemRangeChanged(1,adapter.getItemCount()-1);
             }
         });
 
@@ -37,8 +38,11 @@ public class TestRangeItemActivity extends AppCompatActivity {
         btRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter.getList().remove(1);
-                adapter.notifyItemRemoved(1);
+
+                adapter.getList().set(1,"set2");
+                adapter.notifyDataSetChanged();
+//                adapter.getList().remove(1);
+//                adapter.notifyItemRemoved(1);
 //                adapter.notifyItemRangeChanged(1,adapter.getItemCount()-1);
             }
         });

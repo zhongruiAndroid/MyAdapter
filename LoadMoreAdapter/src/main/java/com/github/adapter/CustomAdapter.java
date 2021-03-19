@@ -99,19 +99,26 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
                 return holder;
             }
         }
-
-        View customView = getCustomView();
-        if (customView != null) {
-            holder = new CustomViewHolder(customView);
-        } else {
-            holder = new CustomViewHolder(mInflater.inflate(layoutId, viewGroup, false));
+        View viewForViewType = getViewForViewType(mInflater, viewGroup, viewType);
+        if(viewForViewType!=null){
+            holder = new CustomViewHolder(viewForViewType);
+        }else{
+            View customView = getCustomView();
+            if (customView != null) {
+                holder = new CustomViewHolder(customView);
+            } else {
+                holder = new CustomViewHolder(mInflater.inflate(layoutId, viewGroup, false));
+            }
         }
+
         setItemClickListener(holder);
         setItemLongClickListener(holder);
         onCreateDataView(holder);
         return holder;
     }
-
+    public View getViewForViewType(LayoutInflater mInflater,ViewGroup viewGroup,int viewType){
+        return null;
+    }
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
         if (isHeaderViewPos(position) || isFooterViewPos(position)) {
@@ -294,6 +301,9 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
         addList(list, false,false);
     }
 
+    public void addList(List<T> list, boolean isNotifyData ) {
+        addList(list,isNotifyData,false);
+    }
     public void addList(List<T> list, boolean isNotifyData,boolean useAnim) {
         if(list==null||list.size()<=0){
             return;

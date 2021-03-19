@@ -27,6 +27,13 @@
         android:textAllCaps="false"
         android:text="testRangeItem"
         />
+    <Button
+        android:id="@+id/btTestExpandable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="testExpandable"
+        />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv"
         android:layout_width="match_parent"

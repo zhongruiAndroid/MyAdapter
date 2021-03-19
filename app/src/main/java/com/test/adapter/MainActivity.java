@@ -18,6 +18,7 @@ import com.github.adapter.LoadListener;
 import com.github.adapter.LoadMoreAdapter;
 import com.github.adapter.listener.AdapterOnClickListener;
 import com.test.adapter.dividerline.BaseItemDivider;
+import com.test.adapter.expandable.ExpandableActivity;
 import com.test.adapter.test.TestAdapterActivity;
 import com.test.adapter.testload.TestLoadActivity;
 
@@ -50,6 +51,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, TestRangeItemActivity.class));
+            }
+        });
+        View btTestExpandable = findViewById(R.id.btTestExpandable);
+        btTestExpandable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ExpandableActivity.class));
             }
         });
         RecyclerView recyclerView = findViewById(R.id.rv);
