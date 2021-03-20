@@ -66,9 +66,12 @@ public abstract class ExpandableAdapter<T extends IExpandable> extends LoadMoreA
         }*/
         int count = 0;
         /*因为要遍历下一个，所以count要加1*/
-        for (int i = 0; i < getList().size(); i = i + count + 1) {
-            count = expandItem(i, needNotify, useAnim);
-            Log.i("=====", i + "===expandAll==" + count);
+        int startSize = getList().size();
+        int dataPosition=0;
+        for (int i = 0; i < startSize; i ++) {
+            count = expandItem(dataPosition, needNotify, useAnim);
+            Log.i("=====", dataPosition + "===expandAll==" + count);
+            dataPosition=count+1+dataPosition;
         }
     }
 
