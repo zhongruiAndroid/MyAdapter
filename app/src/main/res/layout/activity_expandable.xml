@@ -4,7 +4,75 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".expandable.ExpandableActivity">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    >
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/cbNotify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="更新数据"
+        android:checked="true"
+        />
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/cbShowAnim"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="显示动画"
+        />
+    <Button
+        android:id="@+id/btNotifyData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="点击更新数据"
+        />
+</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btExpandAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="展开所有item"
+            android:textAllCaps="false" />
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/cbExpandFlag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="展开某个item时展开所有子item" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btCollapseAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="折叠所有item"
+            android:textAllCaps="false" />
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/cbCollapseFlag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="折叠某个item时折叠所有子item" />
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvExpandable"
