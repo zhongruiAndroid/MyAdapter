@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
+import com.github.adapter.listener.AdapterOnClickListener;
 import com.test.adapter.R;
 
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ public class ExpandableActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expandable);
         rvExpandable = findViewById(R.id.rvExpandable);
-        ExpandableAdapter adapter=new ExpandableAdapter(1);
+        final ExpandableAdapter adapter=new ExpandableAdapter(1);
 
 
 
@@ -59,12 +61,23 @@ public class ExpandableActivity extends AppCompatActivity {
         test(list,1);
 
         adapter.setList(list);
-        adapter.expandAll();
+//        adapter.expandAll();
         List<ExpandableBean> list1 = adapter.getList();
 
         rvExpandable.setLayoutManager(new LinearLayoutManager(this));
         rvExpandable.setAdapter(adapter);
 
+
+        adapter.setOnItemClickListener(new AdapterOnClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                if(adapter.isExpand(position)){
+                    adapter.collapseItem(position,true,false);
+                }else{
+                    adapter.expandItem(position,true,false);
+                }
+            }
+        });
     }
 
     public static void test(List<ExpandableBean> list,int num){
