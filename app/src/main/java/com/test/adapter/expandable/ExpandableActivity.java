@@ -1,5 +1,7 @@
 package com.test.adapter.expandable;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatCheckBox;
@@ -55,7 +57,7 @@ public class ExpandableActivity extends AppCompatActivity {
         btCollapseAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                adapter.collapseAll(cbCollapseFlag.isChecked(),cbNotify.isChecked(), cbShowAnim.isChecked());
+                adapter.collapseAll(cbCollapseFlag.isChecked(), cbNotify.isChecked());
             }
         });
         cbCollapseFlag = findViewById(R.id.cbCollapseFlag);
@@ -71,24 +73,24 @@ public class ExpandableActivity extends AppCompatActivity {
                 for (int k = 0; k < 3; k++) {
                     ExpandableBean bean3 = new ExpandableBean();
                     List<ExpandableBean> list3 = new ArrayList<>();
-                   /* for (int l = 0; l < 3; l++) {
-                        ExpandableBean bean4=new ExpandableBean();
-                        bean4.level=3;
-                        bean4.title="第4级,第"+l+"个item";
+                    for (int l = 0; l < 3; l++) {
+                        ExpandableBean bean4 = new ExpandableBean();
+                        bean4.setLevel(3);
+                        bean4.title = "第4级,第" + l + "个item";
                         list3.add(bean4);
-                    }*/
-//                    bean3.list=list3;
-                    bean3.level = 2;
+                    }
+                    bean3.list = list3;
+                    bean3.setLevel(2);
                     bean3.title = "第3级,第" + k + "个item";
                     list2.add(bean3);
                 }
                 bean2.list = list2;
-                bean2.level = 1;
+                bean2.setLevel(1);
                 bean2.title = "第2级,第" + j + "个item";
                 list1.add(bean2);
             }
             bean1.list = list1;
-            bean1.level = 0;
+            bean1.setLevel(0);
             bean1.title = "第1级,第" + i + "个item";
             list.add(bean1);
         }
@@ -101,7 +103,7 @@ public class ExpandableActivity extends AppCompatActivity {
 
         rvExpandable.setLayoutManager(new LinearLayoutManager(this));
         rvExpandable.setAdapter(adapter);
-
+//        rvExpandable.setItemAnimator(null);
 
         adapter.setOnItemClickListener(new AdapterOnClickListener() {
             @Override

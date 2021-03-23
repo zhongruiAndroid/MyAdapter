@@ -1,6 +1,5 @@
 package com.github.adapter.expandable;
 
-import android.support.annotation.IntRange;
 import android.support.annotation.LayoutRes;
 import android.util.Log;
 import android.util.SparseArray;
@@ -14,7 +13,7 @@ import com.github.adapter.LoadMoreAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ExpandableAdapter<T extends IExpandable> extends LoadMoreAdapter<T> {
+public abstract class ExpandableAdapter<T extends Expandable> extends LoadMoreAdapter<T> {
     public static final int VIEW_TYPE_NONE = -1;
     private SparseIntArray expandableLayoutId;
     private SparseArray<View> expandableLayoutView;
@@ -106,7 +105,7 @@ public abstract class ExpandableAdapter<T extends IExpandable> extends LoadMoreA
     }
 
     public int expandItem(int dataPosition, boolean expandChildItem, boolean needNotify, boolean useAnim) {
-        IExpandable item = getExpandableItem(dataPosition);
+        Expandable item = getExpandableItem(dataPosition);
         if (item == null) {
             return 0;
         }
@@ -128,7 +127,7 @@ public abstract class ExpandableAdapter<T extends IExpandable> extends LoadMoreA
         return count;
     }
 
-    private int recursiveExpandItem(IExpandable item, int dataPosition, boolean expandChildItem) {
+    private int recursiveExpandItem(Expandable item, int dataPosition, boolean expandChildItem) {
         if (item == null) {
             return 0;
         }
@@ -139,12 +138,14 @@ public abstract class ExpandableAdapter<T extends IExpandable> extends LoadMoreA
 
         int childSize = childList.size();
         getList().addAll(dataPosition + 1, childList);
-
+        if(childSize>0){
+            notifyItemRangeInserted(getItemPosition(dataPosition+1),childSize);
+        }
         int count = 0;
         int startSize = childList.size();
         for (int i = 0; i < startSize; i++) {
             dataPosition = count + 1 + dataPosition;
-            IExpandable expandableItem = getExpandableItem(dataPosition);
+            Expandable expandableItem = getExpandableItem(dataPosition);
             /*如果需要展开所有子item或者当前item是展开状态*/
             if (expandChildItem) {
                 expandableItem.setExpandable(true);
@@ -162,38 +163,15 @@ public abstract class ExpandableAdapter<T extends IExpandable> extends LoadMoreA
 
     /*关闭所有item*/
     public void collapseAll() {
-        collapseAll(false, false);
+        collapseAll(false);
     }
 
-    public void collapseAll(boolean needNotify, boolean useAnim) {
-        if (getList() == null) {
-            return;
-        }
-        List<T> list = new ArrayList<>();
-        for (int i = 0; i < getList().size(); i++) {
-            T t = getList().get(i);
-            if (t == null) {
-                continue;
-            }
-            int level = t.getLevel();
-            if (level == 0) {
-                t.setExpandable(false);
-                list.add(t);
-            }
-        }
-        setList(list);
-        if (needNotify) {
-            if (useAnim) {
-                int itemPosition = getItemPosition(0);
-                notifyItemRangeChanged(itemPosition, getItemCount() - itemPosition);
-            } else {
-                notifyDataSetChanged();
-            }
-        }
+    public void collapseAll(boolean needNotify ) {
+        collapseAll(false,needNotify);
     }
 
     @Deprecated
-    public void collapseAll(boolean collapseAllChildItem, boolean needNotify, boolean useAnim) {
+    public void collapseAll(boolean collapseAllChildItem, boolean needNotify) {
         if (getList() == null) {
             return;
         }
@@ -221,12 +199,7 @@ public abstract class ExpandableAdapter<T extends IExpandable> extends LoadMoreA
         }
         setList(list);
         if (needNotify) {
-            if (useAnim) {
-                int itemPosition = getItemPosition(0);
-                notifyItemRangeChanged(itemPosition, getItemCount() - itemPosition);
-            } else {
-                notifyDataSetChanged();
-            }
+            notifyDataSetChanged();
         }
     }
     private void collapseCheckAllChildItem(T item){
@@ -250,7 +223,7 @@ public abstract class ExpandableAdapter<T extends IExpandable> extends LoadMoreA
         if (dataPosition < 0) {
             return 0;
         }
-        IExpandable expandable = getExpandableItem(dataPosition);
+        Expandable expandable = getExpandableItem(dataPosition);
         if (expandable == null || !expandable.isExpandable()) {
             return 0;
         }
@@ -258,7 +231,7 @@ public abstract class ExpandableAdapter<T extends IExpandable> extends LoadMoreA
         int level = expandable.getLevel();
         List<Integer> indexList = new ArrayList<>();
         for (int i = dataPosition + 1; i < getList().size(); i++) {
-            IExpandable item = getExpandableItem(i);
+            Expandable item = getExpandableItem(i);
             if (item != null && item.getLevel() <= level) {
                 break;
             }
@@ -269,8 +242,9 @@ public abstract class ExpandableAdapter<T extends IExpandable> extends LoadMoreA
             indexList.add(i);
         }
         for (int i = indexList.size() - 1; i >= 0; i--) {
-            int integer = indexList.get(i);
-            getList().remove(integer);
+            int position = indexList.get(i);
+            getList().remove(position);
+            notifyItemRemoved(getItemPosition(position));
         }
         if (needNotify) {
             if (useAnim) {
@@ -284,14 +258,14 @@ public abstract class ExpandableAdapter<T extends IExpandable> extends LoadMoreA
     }
 
 
-    private IExpandable getExpandableItem(int dataPosition) {
+    private Expandable getExpandableItem(int dataPosition) {
         /*if(getList()==null){
             return null;
         }
         if(dataPosition>=getList().size()){
             return null;
         }*/
-        IExpandable iExpandable = getList().get(dataPosition);
+        Expandable iExpandable = getList().get(dataPosition);
         return iExpandable;
 
     }

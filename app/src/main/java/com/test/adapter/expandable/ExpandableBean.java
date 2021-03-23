@@ -1,30 +1,14 @@
 package com.test.adapter.expandable;
 
-import com.github.adapter.expandable.IExpandable;
+import com.github.adapter.expandable.Expandable;
 
 import java.util.List;
 
-public class ExpandableBean implements IExpandable<ExpandableBean> {
+public class ExpandableBean extends Expandable<ExpandableBean> {
     public String title;
     public List<ExpandableBean> list;
-    private boolean expandable;
-    public int level;
-    @Override
+
     public List<ExpandableBean> getChildList() {
         return list;
-    }
-
-    @Override
-    public boolean isExpandable() {
-        return expandable;
-    }
-
-    @Override
-    public void setExpandable(boolean expandable) {
-        this.expandable=expandable;
-    }
-    @Override
-    public int getLevel() {
-        return level;
     }
 }
