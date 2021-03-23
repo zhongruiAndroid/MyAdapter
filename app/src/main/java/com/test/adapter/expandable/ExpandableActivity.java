@@ -113,6 +113,10 @@ public class ExpandableActivity extends AppCompatActivity {
                 } else {
                     adapter.expandItem(position, cbExpandFlag.isChecked(), cbNotify.isChecked(), cbShowAnim.isChecked());
                 }
+                int parentDataPosition = adapter.getParentDataPosition(position);
+                ExpandableBean expandableBean = adapter.getList().get(position);
+                int parentDataPosition2 = adapter.getParentDataPosition(expandableBean);
+                Log.i("=====",parentDataPosition+"==parentDataPosition==="+parentDataPosition2);
             }
         });
     }

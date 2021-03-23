@@ -256,8 +256,41 @@ public abstract class ExpandableAdapter<T extends Expandable> extends LoadMoreAd
         }
         return indexList.size();
     }
-
-
+    public int getParentDataPosition(int childDataPosition){
+        T t = getList().get(childDataPosition);
+        if(t==null){
+            return -1;
+        }
+        int level = t.getLevel();
+        if(level==0){
+            return childDataPosition;
+        }else if(level<0){
+            return -1;
+        }
+        return getParentDataPosition(t);
+    }
+    public int getParentDataPosition(T childData){
+        if(childData==null){
+            return -1;
+        }
+        int level = childData.getLevel();
+        int position = getList().indexOf(childData);
+        if(level==0){
+            return position;
+        }else if(level<0){
+            return -1;
+        }
+        for (int i = position; i >=0; i--) {
+            T t = getList().get(i);
+            if(t==null){
+                continue;
+            }
+            if(t.getLevel()<level&&t.getLevel()>=0){
+                return i;
+            }
+        }
+        return -1;
+    }
     private Expandable getExpandableItem(int dataPosition) {
         /*if(getList()==null){
             return null;
