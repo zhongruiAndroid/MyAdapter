@@ -1,20 +1,15 @@
 package com.test.adapter.testload;
 
-import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.test.adapter.R;
 import com.test.adapter.dividerline.BaseItemDivider;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TestLoadActivity extends AppCompatActivity {
     RecyclerView rvTestLoad;

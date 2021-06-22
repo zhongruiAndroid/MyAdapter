@@ -1,13 +1,11 @@
 package com.github.adapter;
 
-import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
-import android.support.v4.util.SparseArrayCompat;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.collection.SparseArrayCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 

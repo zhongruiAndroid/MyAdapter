@@ -1,7 +1,7 @@
 package com.github.adapter.expandable;
 
-import android.support.annotation.LayoutRes;
-import android.util.Log;
+import androidx.annotation.LayoutRes;
+
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;

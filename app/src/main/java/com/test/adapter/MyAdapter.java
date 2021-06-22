@@ -1,11 +1,9 @@
 package com.test.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
+import androidx.annotation.NonNull;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.view.ViewGroup;
 
 import com.github.adapter.CustomViewHolder;
