@@ -309,4 +309,50 @@ public abstract class ExpandableAdapter<T extends Expandable> extends LoadMoreAd
 
     }
 
+    @Override
+    public void remove(int dataPosition, boolean isNotifyData, boolean useAnim) {
+        if(mList==null||dataPosition>=mList.size()||dataPosition<0){
+            return;
+        }
+        T item = mList.get(dataPosition);
+        if(item instanceof Expandable){
+            /*移除item之前，需要移除item展开时的子item*/
+            removeAllChild(dataPosition,(Expandable)item);
+        }
+        /*移除list里面的数据之后，需要移除原始数据，否则再次展开数据还在*/
+        removeOriginDataFromParent(item);
+        super.remove(dataPosition, isNotifyData, useAnim);
+    }
+
+    /*移除list里面的数据之后，需要移除原始数据，否则再次展开数据还在*/
+    public void removeOriginDataFromParent(T child) {
+        int position = getParentDataPosition(child);
+        if (position >= 0) {
+            T parent = mList.get(position);
+            if (parent != child) {
+                List childList = parent.getChildList();
+                if(childList!=null){
+                    childList.remove(child);
+                }
+            }
+        }
+    }
+    /**
+     * 移除展开的item的child
+     * @param parentDataPosition
+     * @param parentItem
+     */
+    public void removeAllChild(int parentDataPosition,Expandable parentItem){
+        if(parentItem.isExpandable()){
+            List childList = parentItem.getChildList();
+            if(childList==null||childList.size()==0){
+                return;
+            }
+            for (int i = 0; i < childList.size(); i++) {
+                /*因为子item被移除后，下一个item下标自动减一，所以这里只需要parentDataPosition+1*/
+                remove(parentDataPosition+1);
+            }
+        }
+
+    }
 }
