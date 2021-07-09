@@ -23,10 +23,16 @@ public abstract class ExpandableAdapter<T extends Expandable> extends LoadMoreAd
     }
 
     private int getLayoutId(int viewType) {
+        if (expandableLayoutId == null) {
+            expandableLayoutId = new SparseIntArray();
+        }
         return expandableLayoutId.get(viewType, VIEW_TYPE_NONE);
     }
 
     private View getLayoutView(int viewType) {
+        if (expandableLayoutView == null) {
+            expandableLayoutView = new SparseArray();
+        }
         return expandableLayoutView.get(viewType, null);
     }
 
