@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 
 import com.github.adapter.listener.AdapterOnClickListener;
+import com.github.adapter.listener.AdapterOnLongClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
     protected int layoutId;
 
     protected AdapterOnClickListener mClickListener;
-    protected AdapterOnClickListener mLongClickListener;
+    protected AdapterOnLongClickListener mLongClickListener;
 
 
     private final int view_type_header = 50000;
@@ -35,13 +36,12 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
 
 
     protected AdapterOnClickListener headerClickListener;
-    protected AdapterOnClickListener headerLongClickListener;
+    protected AdapterOnLongClickListener headerLongClickListener;
     protected AdapterOnClickListener footerClickListener;
-    protected AdapterOnClickListener footerLongClickListener;
+    protected AdapterOnLongClickListener footerLongClickListener;
 
 
     public abstract void bindData(CustomViewHolder holder, int position, T item);
-    public void bindDataByNull(CustomViewHolder holder, int position){};
 
     public View getCustomView() {
         return null;
@@ -136,7 +136,8 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
         }
         int dataPosition = getDataPosition(position);
         if (mList == null || dataPosition >= mList.size()) {
-            bindDataByNull(holder,dataPosition);
+//            bindDataByNull(holder,dataPosition);
+            bindData(holder,dataPosition,null);
         } else {
             bindData(holder,dataPosition,mList.get(dataPosition));
         }
@@ -355,9 +356,26 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
             }
         }
     }
+    public void notifyItemUpdate_(int dataPosition){
+        int itemPosition=dataPosition+getHeaderCount();
+        notifyItemChanged(itemPosition);
+    }
+    public void notifyItemRemove_(int dataPosition,boolean useAnim){
+        int itemPosition=dataPosition+getHeaderCount();
+        notifyItemRemoved(itemPosition);
+        notifyItemRangeChanged(itemPosition,getItemCount()-itemPosition);
+    }
+    public void notifyItemAdd_(int dataPosition,boolean useAnim){
+        int itemPosition=dataPosition+getHeaderCount();
+        notifyItemInserted(itemPosition);
+        notifyItemRangeChanged(itemPosition,getItemCount()-itemPosition);
+    }
 
     public List<T> getList() {
-        return mList==null?new ArrayList<T>():mList;
+        if(mList==null){
+            mList=new ArrayList<T>();
+        }
+        return mList;
     }
 
     public void remove(int dataPosition) {
@@ -382,7 +400,7 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
         mClickListener = listener;
     }
 
-    public void setOnItemLongClickListener(AdapterOnClickListener listener) {
+    public void setOnItemLongClickListener(AdapterOnLongClickListener listener) {
         mLongClickListener = listener;
     }
 
@@ -390,7 +408,7 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
         headerClickListener = listener;
     }
 
-    public void setOnHeaderLongClickListener(AdapterOnClickListener listener) {
+    public void setOnHeaderLongClickListener(AdapterOnLongClickListener listener) {
         headerLongClickListener = listener;
     }
 
@@ -398,7 +416,7 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
         footerClickListener = listener;
     }
 
-    public void setOnFooterLongClickListener(AdapterOnClickListener listener) {
+    public void setOnFooterLongClickListener(AdapterOnLongClickListener listener) {
         footerLongClickListener = listener;
     }
 
@@ -419,8 +437,7 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    headerLongClickListener.onItemClick(holder.itemView, holder.getAdapterPosition());
-                    return true;
+                    return headerLongClickListener.onItemClick(holder.itemView, holder.getAdapterPosition());
                 }
             });
         }
@@ -431,8 +448,7 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    footerLongClickListener.onItemClick(holder.itemView, holder.getAdapterPosition()- getHeaderCount() - getDataCount());
-                    return true;
+                    return footerLongClickListener.onItemClick(holder.itemView, holder.getAdapterPosition()- getHeaderCount() - getDataCount());
                 }
             });
         }
@@ -465,8 +481,7 @@ public abstract class CustomAdapter<T> extends RecyclerView.Adapter<CustomViewHo
             holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    mLongClickListener.onItemClick(holder.itemView, getDataPosition(holder.getAdapterPosition()));
-                    return true;
+                    return mLongClickListener.onItemClick(holder.itemView, getDataPosition(holder.getAdapterPosition()));
                 }
             });
         }
